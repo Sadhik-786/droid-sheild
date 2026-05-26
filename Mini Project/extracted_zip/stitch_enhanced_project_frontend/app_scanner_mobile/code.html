@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&amp;family=Inter:wght@400;700&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#690005",
+                    "accent-amber": "#fbbf24",
+                    "surface-container": "#1d2026",
+                    "on-tertiary-fixed": "#40000d",
+                    "secondary": "#4edea3",
+                    "on-secondary-container": "#00311f",
+                    "text-secondary": "#9ca3af",
+                    "error-container": "#93000a",
+                    "tertiary-fixed-dim": "#ffb2b7",
+                    "bg-surface": "#121929",
+                    "tertiary-container": "#ff929a",
+                    "tertiary-fixed": "#ffdadb",
+                    "background": "#10131a",
+                    "inverse-surface": "#e0e2eb",
+                    "surface-container-low": "#191c22",
+                    "primary-fixed-dim": "#7bd0ff",
+                    "surface-tint": "#7bd0ff",
+                    "on-secondary": "#003824",
+                    "surface-bright": "#363940",
+                    "tertiary": "#ffbcbf",
+                    "bg-console": "#05070a",
+                    "secondary-container": "#00a572",
+                    "inverse-primary": "#00668a",
+                    "on-tertiary-container": "#8c0028",
+                    "text-primary": "#f3f4f6",
+                    "on-tertiary": "#67001b",
+                    "on-background": "#e0e2eb",
+                    "inverse-on-surface": "#2d3037",
+                    "error": "#ffb4ab",
+                    "on-surface-variant": "#bdc8d1",
+                    "surface-container-high": "#272a31",
+                    "on-primary-fixed-variant": "#004c69",
+                    "on-primary-fixed": "#001e2c",
+                    "primary-container": "#38bdf8",
+                    "on-tertiary-fixed-variant": "#92002a",
+                    "outline": "#87929a",
+                    "on-error-container": "#ffdad6",
+                    "secondary-fixed-dim": "#4edea3",
+                    "surface": "#10131a",
+                    "accent-orange": "#f97316",
+                    "outline-variant": "#3e484f",
+                    "surface-variant": "#32353c",
+                    "on-primary": "#00354a",
+                    "on-secondary-fixed": "#002113",
+                    "text-muted": "#6b7280",
+                    "surface-container-lowest": "#0b0e14",
+                    "secondary-fixed": "#6ffbbe",
+                    "primary-fixed": "#c4e7ff",
+                    "on-surface": "#e0e2eb",
+                    "surface-container-highest": "#32353c",
+                    "on-primary-container": "#004965",
+                    "bg-obsidian": "#080b11",
+                    "on-secondary-fixed-variant": "#005236",
+                    "surface-dim": "#10131a",
+                    "primary": "#8ed5ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "20px",
+                    "base": "4px",
+                    "sm": "12px",
+                    "margin-desktop": "32px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "margin-mobile": "16px",
+                    "xs": "8px",
+                    "xl": "32px"
+            },
+            "fontFamily": {
+                    "headline-md-mobile": ["Outfit"],
+                    "label-caps": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "display-lg": ["Outfit"],
+                    "body-lg": ["Inter"],
+                    "headline-sm": ["Outfit"],
+                    "label-mono": ["Fira Code"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Outfit"]
+            },
+            "fontSize": {
+                    "headline-md-mobile": ["20px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "label-caps": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "body-sm": ["12px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-sm": ["18px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "label-mono": ["12px", {"lineHeight": "1.6", "letterSpacing": "-0.02em", "fontWeight": "450"}],
+                    "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(18, 25, 41, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+        }
+        .scan-spinner {
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .cyber-glow {
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        }
+        .speedometer-clip {
+            clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-bg-obsidian text-text-primary min-h-screen selection:bg-primary/30 scrollbar-hide">
+<!-- Top AppBar (from JSON context) -->
+<header class="fixed top-0 w-full bg-bg-obsidian/65 backdrop-blur-xl text-primary font-headline-md-mobile text-headline-md-mobile font-bold tracking-tight border-b border-outline-variant/15 shadow-[0_0_15px_rgba(56,189,248,0.1)] flex justify-between items-center px-margin-mobile h-16 w-full z-50">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="font-headline-md-mobile text-headline-md-mobile uppercase">SECURITY COMMAND</span>
+</div>
+<div class="flex gap-md">
+<span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 transition-transform">sensors</span>
+</div>
+</header>
+<main class="pt-20 pb-32 px-margin-mobile flex flex-col gap-lg">
+<!-- App Selection Search -->
+<section class="flex flex-col gap-md">
+<div class="flex justify-between items-end">
+<h2 class="font-headline-sm text-headline-sm text-primary">Target Selection</h2>
+<span class="font-label-caps text-label-caps text-text-muted">142 APPS LOADED</span>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-text-muted">search</span>
+<input class="w-full bg-bg-console border border-outline-variant/30 rounded-xl py-md pl-12 pr-md font-body-md text-text-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cyber-glow" placeholder="Select Application Profile..." type="text"/>
+</div>
+<!-- Profile Grid -->
+<div class="grid grid-cols-2 gap-sm">
+<!-- App Card: WhatsApp -->
+<button class="glass-panel p-md rounded-xl flex flex-col items-center gap-xs hover:border-primary/50 transition-colors active:scale-95" onclick="startScan('WhatsApp')">
+<div class="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary mb-xs">
+<span class="material-symbols-outlined text-[32px]">chat</span>
+</div>
+<span class="font-headline-sm text-[14px]">WhatsApp</span>
+<span class="font-label-caps text-[10px] text-text-muted">SOCIAL MEDIA</span>
+</button>
+<!-- App Card: Sudoku -->
+<button class="glass-panel p-md rounded-xl flex flex-col items-center gap-xs hover:border-primary/50 transition-colors active:scale-95" onclick="startScan('Sudoku')">
+<div class="w-12 h-12 rounded-lg bg-accent-amber/10 flex items-center justify-center text-accent-amber mb-xs">
+<span class="material-symbols-outlined text-[32px]">grid_on</span>
+</div>
+<span class="font-headline-sm text-[14px]">Sudoku Max</span>
+<span class="font-label-caps text-[10px] text-text-muted">GAMING</span>
+</button>
+<!-- App Card: Maps -->
+<button class="glass-panel p-md rounded-xl flex flex-col items-center gap-xs hover:border-primary/50 transition-colors active:scale-95" onclick="startScan('Maps')">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-xs">
+<span class="material-symbols-outlined text-[32px]">map</span>
+</div>
+<span class="font-headline-sm text-[14px]">Map Finder</span>
+<span class="font-label-caps text-[10px] text-text-muted">UTILITY</span>
+</button>
+<!-- App Card: Generic -->
+<button class="glass-panel p-md rounded-xl flex flex-col items-center gap-xs hover:border-primary/50 transition-colors active:scale-95" onclick="startScan('Cryptoview')">
+<div class="w-12 h-12 rounded-lg bg-error/10 flex items-center justify-center text-error mb-xs">
+<span class="material-symbols-outlined text-[32px]">currency_bitcoin</span>
+</div>
+<span class="font-headline-sm text-[14px]">Cryptoview</span>
+<span class="font-label-caps text-[10px] text-text-muted">FINANCE</span>
+</button>
+</div>
+</section>
+<!-- Scan Progress Area (Conditional Visibility via ID) -->
+<section class="hidden flex flex-col gap-md animate-pulse" id="scan-section">
+<div class="glass-panel p-lg rounded-xl flex items-center gap-lg">
+<div class="relative w-16 h-16">
+<div class="absolute inset-0 rounded-full border-4 border-primary/20"></div>
+<div class="absolute inset-0 rounded-full border-4 border-primary scan-spinner"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">radar</span>
+</div>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-sm text-primary mb-xs" id="scanning-app-name">Analyzing App...</h3>
+<div class="w-full bg-bg-console h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[65%] transition-all duration-1000"></div>
+</div>
+<p class="font-label-caps text-text-muted mt-base">DEEP HEURISTICS ACTIVE</p>
+</div>
+</div>
+<!-- Terminal Log Feed -->
+<div class="bg-bg-console rounded-xl border border-outline-variant/20 overflow-hidden">
+<div class="bg-surface-variant/30 px-md py-xs border-b border-outline-variant/10 flex items-center gap-xs">
+<div class="w-2.5 h-2.5 rounded-full bg-error/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-accent-amber/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-secondary/50"></div>
+<span class="font-label-mono text-[10px] text-text-muted ml-base">LIVE_ANALYSIS.LOG</span>
+</div>
+<div class="p-md font-label-mono text-label-mono h-32 overflow-y-auto flex flex-col gap-base" id="terminal-log">
+<span class="text-secondary">[INIT] Application profile loaded.</span>
+<span class="text-primary">[PROC] Decompiling APK manifest...</span>
+<span class="text-text-muted">[INFO] 24 Permissions identified.</span>
+<span class="text-accent-amber">[WARN] Suspicious URL patterns found in /assets</span>
+<span class="text-primary">[PROC] Analyzing network intent filters...</span>
+</div>
+</div>
+</section>
+<!-- Threat Analysis Results -->
+<section class="flex flex-col gap-md" id="results-section">
+<div class="glass-panel p-lg rounded-2xl flex flex-col items-center gap-lg relative overflow-hidden">
+<!-- Background Decorative Glow -->
+<div class="absolute -top-12 -right-12 w-32 h-32 bg-error/10 blur-[40px] rounded-full"></div>
+<h2 class="font-headline-sm text-primary self-start">Threat Analysis</h2>
+<!-- Speedometer Risk Gauge -->
+<div class="relative w-64 h-32 overflow-hidden flex items-end justify-center">
+<div class="w-64 h-64 border-[16px] border-bg-console rounded-full absolute top-0"></div>
+<div class="w-64 h-64 border-[16px] border-error rounded-full absolute top-0 speedometer-clip rotate-[30deg]"></div>
+<div class="absolute bottom-0 text-center">
+<span class="font-display-lg text-[48px] text-error leading-none">84%</span>
+<p class="font-label-caps text-error tracking-widest mt-base">CRITICAL RISK</p>
+</div>
+</div>
+<div class="w-full flex justify-between pt-md border-t border-outline-variant/15">
+<div class="flex flex-col">
+<span class="font-label-caps text-text-muted">PACKAGE NAME</span>
+<span class="font-body-md text-text-primary">com.cryptoview.app</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-caps text-text-muted">VERSION</span>
+<span class="font-body-md text-text-primary">v2.4.1-beta</span>
+</div>
+</div>
+</div>
+<!-- Tabs Section -->
+<div class="flex flex-col gap-sm">
+<div class="flex bg-bg-console p-1 rounded-xl border border-outline-variant/20">
+<button class="flex-1 py-xs rounded-lg bg-surface-variant text-text-primary font-label-caps text-label-caps transition-all">RULE MATCHES</button>
+<button class="flex-1 py-xs rounded-lg text-text-muted font-label-caps text-label-caps hover:text-text-primary transition-all">PERMISSIONS</button>
+</div>
+<!-- Tab Content: Rule Matches -->
+<div class="flex flex-col gap-sm">
+<div class="glass-panel p-md rounded-xl flex items-start gap-md border-l-4 border-l-error">
+<span class="material-symbols-outlined text-error mt-1">error</span>
+<div>
+<h4 class="font-headline-sm text-[15px] text-text-primary">Background Mic Access</h4>
+<p class="font-body-sm text-text-muted mt-xs">App attempts to initialize audio recording without foreground notification or user UI focus.</p>
+</div>
+</div>
+<div class="glass-panel p-md rounded-xl flex items-start gap-md border-l-4 border-l-accent-amber">
+<span class="material-symbols-outlined text-accent-amber mt-1">warning</span>
+<div>
+<h4 class="font-headline-sm text-[15px] text-text-primary">External JS Injection</h4>
+<p class="font-body-sm text-text-muted mt-xs">WebView components allow loading of non-HTTPS domains through Javascript Interfaces.</p>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full bg-error py-md rounded-xl font-headline-sm text-[16px] text-on-error uppercase tracking-widest cyber-glow active:scale-95 transition-all">Quarantine Application</button>
+</section>
+</main>
+<!-- Bottom Navigation Bar (from JSON context) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center pt-sm pb-safe px-xs bg-bg-obsidian/80 backdrop-blur-lg border-t border-outline-variant/15 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-text-muted hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary drop-shadow-[0_0_8px_rgba(78,222,163,0.5)] active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">radar</span>
+<span class="font-label-caps text-label-caps">Scan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-text-muted hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">query_stats</span>
+<span class="font-label-caps text-label-caps">Analyzer</span>
+</a>
+<a class="flex flex-col items-center justify-center text-text-muted hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-caps text-label-caps">ML</span>
+</a>
+<a class="flex flex-col items-center justify-center text-text-muted hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">more_horiz</span>
+<span class="font-label-caps text-label-caps">More</span>
+</a>
+</nav>
+<script>
+        function startScan(appName) {
+            const scanSec = document.getElementById('scan-section');
+            const resultsSec = document.getElementById('results-section');
+            const appLabel = document.getElementById('scanning-app-name');
+            const log = document.getElementById('terminal-log');
+            
+            // UI Transition
+            resultsSec.classList.add('hidden');
+            scanSec.classList.remove('hidden');
+            appLabel.innerText = `Analyzing ${appName}...`;
+            
+            // Mock Log Generator
+            const statuses = [
+                {t: "[PROC] Checking certificates...", c: "text-primary"},
+                {t: "[INFO] Sandbox environment ready.", c: "text-text-muted"},
+                {t: "[SCAN] Entropy analysis at 0.72...", c: "text-secondary"},
+                {t: "[WARN] Obfuscated control flow detected.", c: "text-accent-amber"},
+                {t: "[ERR] Failed to verify developer ID.", c: "text-error"}
+            ];
+            
+            let idx = 0;
+            const interval = setInterval(() => {
+                if(idx < statuses.length) {
+                    const span = document.createElement('span');
+                    span.className = statuses[idx].c;
+                    span.innerText = statuses[idx].t;
+                    log.appendChild(span);
+                    log.scrollTop = log.scrollHeight;
+                    idx++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        scanSec.classList.add('hidden');
+                        resultsSec.classList.remove('hidden');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 1000);
+                }
+            }, 800);
+        }
+    </script>
+</body></html>

@@ -1,0 +1,29 @@
+﻿Android Malicious App Detection System
+Combined PRD + TRD + System Architecture Document
+Mini Project (Medium+ Level)
+Part 1 â€“ Product Requirements Document (PRD)
+Project Title: Android Malicious App Detection System using Hybrid Malware Analysis
+Overview: Lightweight Android antivirus-style app that scans installed applications and detects malicious behavior using permission analysis, APK metadata, rule-based detection, and machine learning.
+Objectives: Detect malicious apps, scan installed apps, analyze permissions, predict malware risk, generate reports, maintain scan history, improve security.
+Scope Includes: App scanning, permission analysis, malware prediction, threat reporting, scan history, alerts.
+Core Features: App Scanner, Permission Analyzer, Malware Detection Engine, ML Predictor, Dashboard, Scan History, Alert System.
+Functional Requirements: Scan apps, extract permissions, analyze metadata, predict risk, display malicious apps, save history, generate reports.
+Non-functional Requirements: Fast performance, reliability, security, usability, scalability.
+Risk Classification: 0â€“20 Safe, 21â€“50 Moderate, 51â€“80 Suspicious, 81â€“100 Malicious.
+Technology Stack: Java + XML, Python Flask API, SQLite, Firebase (optional), Random Forest ML.
+Part 2 â€“ Technical Requirements Document (TRD)
+Modules: UI Module, App Scanner, Permission Analyzer, Rule-Based Malware Engine, Machine Learning Module, Database Module, Alert Module.
+Database: SQLite database malware_detector.db with scan_history and malware_rules tables.
+API: POST /predict for malware prediction; GET /history for scan history.
+UML/Use Cases: Scan Apps, View Reports, View History, Threat Alerts, Admin Rule Updates.
+Technical Workflow: Installed App â†’ Permission Extraction â†’ Metadata Collection â†’ Rule Detection â†’ ML Prediction â†’ Risk Calculation â†’ Threat Classification â†’ Store Result â†’ Dashboard.
+Folder Structure: activities, database, scanner, api, ml, backend (Flask + model).
+Testing: Unit, Functional, Integration, UI, Malware Detection Accuracy.
+Part 3 â€“ System Architecture
+High-Level Architecture: Android App â†’ App Scanner â†’ Permission Analyzer â†’ Rule Engine â†’ ML Detection â†’ Risk Generator â†’ SQLite/Alerts â†’ Report.
+Layered Architecture: Presentation â†’ Application â†’ Business â†’ Data â†’ Backend Layer.
+Clientâ€“Server Architecture: Android app communicates with Flask API hosting Random Forest model.
+Deployment: Android smartphone + optional Flask server for ML predictions.
+End-to-End Flow: User Scan â†’ Installed Apps â†’ Permission Extraction â†’ Rule Check â†’ ML Prediction â†’ Risk Score â†’ Threat Classification â†’ Save Report.
+System Architecture Diagrams (Textual)
+High-Level Flow: User â†’ Android App â†’ Scanner â†’ Permission Analyzer â†’ Rule Engine â†’ ML Model â†’ Risk Score â†’ Report
