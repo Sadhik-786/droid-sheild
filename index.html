@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SECURITY COMMAND - Android Hybrid Malware Detection System</title>
+    
+    <!-- Tailwind CSS with plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+    <!-- Material Symbols Outlined -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <!-- FontAwesome for fallback or specific icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom Tailwind Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-error": "#690005",
+                        "accent-amber": "#fbbf24",
+                        "accent-orange": "#f97316",
+                        "surface-container": "#1d2026",
+                        "secondary": "#4edea3",
+                        "text-secondary": "#9ca3af",
+                        "bg-surface": "#121929",
+                        "background": "#10131a",
+                        "bg-console": "#05070a",
+                        "text-primary": "#f3f4f6",
+                        "error": "#ffb4ab",
+                        "on-surface-variant": "#bdc8d1",
+                        "text-muted": "#6b7280",
+                        "bg-obsidian": "#080b11",
+                        "primary": "#8ed5ff",
+                        "outline-variant": "rgba(62, 72, 79, 0.15)"
+                    },
+                    spacing: {
+                        "gutter": "20px",
+                        "margin-mobile": "16px",
+                        "xs": "8px",
+                        "sm": "12px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xl": "32px"
+                    },
+                    fontFamily: {
+                        "headline-md-mobile": ["Outfit"],
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-sm": ["Outfit"],
+                        "label-mono": ["Fira Code"]
+                    },
+                    fontSize: {
+                        "headline-md-mobile": ["20px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "label-caps": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "body-sm": ["12px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-sm": ["18px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "label-mono": ["12px", {"lineHeight": "1.6", "letterSpacing": "-0.02em", "fontWeight": "450"}]
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-bg-obsidian min-h-screen">
+
+    <!-- Top AppBar (Mobile only) -->
+    <header class="fixed top-0 w-full bg-bg-obsidian/65 backdrop-blur-xl text-primary border-b border-outline-variant/15 flex justify-between items-center px-margin-mobile h-16 z-30 lg:hidden">
+        <div class="flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">shield</span>
+            <span class="font-headline-md-mobile text-[18px] font-bold text-primary tracking-tight">SECURITY COMMAND</span>
+        </div>
+        <div class="flex items-center">
+            <span class="material-symbols-outlined text-on-surface-variant hover:bg-primary/10 transition-colors p-2 rounded-full cursor-pointer">sensors</span>
+        </div>
+    </header>
+
+    <!-- Side Navigation Bar (Desktop only) -->
+    <aside class="hidden lg:flex flex-col w-64 bg-bg-surface border-r border-outline-variant/15 h-screen fixed left-0 top-0 z-40">
+        <div class="p-lg border-b border-outline-variant/15 flex items-center gap-sm">
+            <span class="material-symbols-outlined text-[32px] text-primary" style="font-variation-settings: 'FILL' 1;">shield</span>
+            <div>
+                <h1 class="font-headline-sm text-headline-sm text-text-primary tracking-tight">SECURITY COMMAND</h1>
+                <p class="text-[10px] text-text-muted">Hybrid Malware Detection</p>
+            </div>
+        </div>
+        
+        <nav class="flex-1 p-md flex flex-col gap-xs overflow-y-auto">
+            <button class="flex items-center gap-md px-md py-sm rounded-xl text-text-secondary hover:text-text-primary hover:bg-primary/5 transition-all text-left" data-tab="dashboard-tab">
+                <span class="material-symbols-outlined">home</span>
+                <span class="font-headline-sm text-[14px]">Executive Dashboard</span>
+            </button>
+            <button class="flex items-center gap-md px-md py-sm rounded-xl text-text-secondary hover:text-text-primary hover:bg-primary/5 transition-all text-left" data-tab="scanner-tab">
+                <span class="material-symbols-outlined">radar</span>
+                <span class="font-headline-sm text-[14px]">App Scanner</span>
+            </button>
+            <button class="flex items-center gap-md px-md py-sm rounded-xl text-text-secondary hover:text-text-primary hover:bg-primary/5 transition-all text-left" data-tab="analyzer-tab">
+                <span class="material-symbols-outlined">query_stats</span>
+                <span class="font-headline-sm text-[14px]">Permission Analyzer</span>
+            </button>
+            <button class="flex items-center gap-md px-md py-sm rounded-xl text-text-secondary hover:text-text-primary hover:bg-primary/5 transition-all text-left" data-tab="ml-tab">
+                <span class="material-symbols-outlined">psychology</span>
+                <span class="font-headline-sm text-[14px]">ML Classifier</span>
+            </button>
+            <div class="h-[1px] bg-outline-variant/10 my-sm"></div>
+            <button class="flex items-center gap-md px-md py-sm rounded-xl text-text-secondary hover:text-text-primary hover:bg-primary/5 transition-all text-left" data-tab="database-tab">
+                <span class="material-symbols-outlined">database</span>
+                <span class="font-headline-sm text-[14px]">SQLite Database</span>
+            </button>
+            <button class="flex items-center gap-md px-md py-sm rounded-xl text-text-secondary hover:text-text-primary hover:bg-primary/5 transition-all text-left" data-tab="rules-tab">
+                <span class="material-symbols-outlined">scale</span>
+                <span class="font-headline-sm text-[14px]">Malware Rules Editor</span>
+            </button>
+            <button class="flex items-center gap-md px-md py-sm rounded-xl text-text-secondary hover:text-text-primary hover:bg-primary/5 transition-all text-left" data-tab="console-tab">
+                <span class="material-symbols-outlined">terminal</span>
+                <span class="font-headline-sm text-[14px]">Client-Server Console</span>
+            </button>
+        </nav>
+        
+        <div class="p-md border-t border-outline-variant/15 text-center text-text-muted text-[10px]">
+            <p>Android Malware Shield v1.2.0</p>
+            <p class="mt-1">(Simulated Engine)</p>
+        </div>
+    </aside>
+
+    <!-- Bottom Navigation Bar (Mobile only) -->
+    <nav class="fixed bottom-0 left-0 w-full z-40 flex justify-around items-center pt-sm pb-safe px-xs bg-bg-obsidian/85 backdrop-blur-lg border-t border-outline-variant/15 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] rounded-t-xl lg:hidden">
+        <button class="flex flex-col items-center justify-center text-text-muted hover:text-primary transition-all duration-200" data-tab="dashboard-tab">
+            <span class="material-symbols-outlined">home</span>
+            <span class="font-label-caps text-[9px] mt-1">Home</span>
+        </button>
+        <button class="flex flex-col items-center justify-center text-text-muted hover:text-primary transition-all duration-200" data-tab="scanner-tab">
+            <span class="material-symbols-outlined">radar</span>
+            <span class="font-label-caps text-[9px] mt-1">Scan</span>
+        </button>
+        <button class="flex flex-col items-center justify-center text-text-muted hover:text-primary transition-all duration-200" data-tab="analyzer-tab">
+            <span class="material-symbols-outlined">query_stats</span>
+            <span class="font-label-caps text-[9px] mt-1">Analyzer</span>
+        </button>
+        <button class="flex flex-col items-center justify-center text-text-muted hover:text-primary transition-all duration-200" data-tab="ml-tab">
+            <span class="material-symbols-outlined">psychology</span>
+            <span class="font-label-caps text-[9px] mt-1">ML</span>
+        </button>
+        <button class="flex flex-col items-center justify-center text-text-muted hover:text-primary transition-all duration-200" data-tab="more">
+            <span class="material-symbols-outlined">more_horiz</span>
+            <span class="font-label-caps text-[9px] mt-1">More</span>
+        </button>
+    </nav>
+
+    <!-- Bottom Sheet Menu for Mobile "More" Panel -->
+    <div id="bottom-sheet" class="fixed inset-0 z-50 hidden transition-opacity duration-300 bg-black/60 backdrop-blur-sm opacity-0">
+        <div class="fixed inset-x-0 bottom-0 z-50 flex flex-col max-h-[80vh] bg-bg-obsidian border-t border-outline-variant/30 rounded-t-2xl transform translate-y-full transition-transform duration-300" id="bottom-sheet-content">
+            <div class="flex items-center justify-between px-md py-sm border-b border-outline-variant/15">
+                <h3 class="font-headline-sm text-[16px] text-primary">Advanced Modules</h3>
+                <button id="close-bottom-sheet" class="text-text-muted hover:text-text-primary p-1">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-lg grid grid-cols-3 gap-md">
+                <button class="flex flex-col items-center justify-center p-md rounded-xl bg-bg-surface border border-outline-variant/15 hover:border-primary/50 transition-colors" data-tab="database-tab">
+                    <span class="material-symbols-outlined text-[32px] text-primary mb-xs">database</span>
+                    <span class="font-label-caps text-[10px] text-text-primary text-center">SQLite DB</span>
+                </button>
+                <button class="flex flex-col items-center justify-center p-md rounded-xl bg-bg-surface border border-outline-variant/15 hover:border-primary/50 transition-colors" data-tab="rules-tab">
+                    <span class="material-symbols-outlined text-[32px] text-secondary mb-xs">scale</span>
+                    <span class="font-label-caps text-[10px] text-text-primary text-center">Rules Editor</span>
+                </button>
+                <button class="flex flex-col items-center justify-center p-md rounded-xl bg-bg-surface border border-outline-variant/15 hover:border-primary/50 transition-colors" data-tab="console-tab">
+                    <span class="material-symbols-outlined text-[32px] text-accent-amber mb-xs">terminal</span>
+                    <span class="font-label-caps text-[10px] text-text-primary text-center">Tunnel Console</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="lg:pl-64 min-h-screen pt-20 pb-24 lg:pt-8 lg:pb-8 px-margin-mobile lg:px-12 flex flex-col gap-lg">
+        
+        <!-- Header Bar (Desktop/Main Title) -->
+        <header class="flex justify-between items-center border-b border-outline-variant/15 pb-md">
+            <div>
+                <h1 class="font-headline-sm text-2xl lg:text-3xl text-text-primary font-bold" id="page-title-label">Executive Dashboard</h1>
+                <p class="text-xs text-text-muted mt-1 hidden lg:block">System diagnostic monitoring and metrics aggregation console.</p>
+            </div>
+            <div class="flex items-center gap-sm">
+                <!-- System Status Badge -->
+                <div class="glass-card rounded-full px-4 py-1.5 flex items-center gap-2 border-secondary/20 bg-secondary/5" id="system-status-badge">
+                    <div class="relative flex h-2.5 w-2.5">
+                        <span class="pulse-glow absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary" id="system-status-dot"></span>
+                    </div>
+                    <span class="font-label-caps text-xs text-secondary font-bold" id="system-status-text">System Secure</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 1. DASHBOARD PANEL -->
+        <section class="tab-panel flex flex-col gap-md" id="dashboard-tab">
+            <!-- System Status Banner (matches mobile screenshot) -->
+            <div class="glass-card rounded-xl p-md flex items-center justify-between border-secondary/20 bg-secondary/5 lg:hidden">
+                <div class="flex items-center gap-sm">
+                    <div class="relative flex h-3 w-3">
+                        <span class="pulse-glow absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
+                    </div>
+                    <div>
+                        <h2 class="font-headline-sm text-headline-sm text-secondary">System Secure</h2>
+                        <p class="font-body-sm text-body-sm text-text-muted">Real-time monitoring active</p>
+                    </div>
+                </div>
+                <span class="font-label-caps text-label-caps text-secondary bg-secondary/10 px-2 py-1 rounded" id="system-status-clean-badge">100% CLEAN</span>
+            </div>
+
+            <!-- KPI Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-md">
+                <!-- Card 1: Total Scans -->
+                <div class="glass-card rounded-xl p-md flex flex-col gap-xs">
+                    <span class="material-symbols-outlined text-primary text-[28px]">analytics</span>
+                    <span class="font-label-caps text-text-muted mt-1">TOTAL SCANS</span>
+                    <span class="font-headline-sm text-[24px] lg:text-[28px] text-primary font-bold" id="stat-scans">0</span>
+                </div>
+                <!-- Card 2: Malware Flagged -->
+                <div class="glass-card rounded-xl p-md flex flex-col gap-xs">
+                    <span class="material-symbols-outlined text-error text-[28px]">dangerous</span>
+                    <span class="font-label-caps text-text-muted mt-1">MALWARE FLAG</span>
+                    <span class="font-headline-sm text-[24px] lg:text-[28px] text-error font-bold" id="stat-malware">0</span>
+                </div>
+                <!-- Card 3: Avg Risk -->
+                <div class="glass-card rounded-xl p-md flex flex-col gap-xs">
+                    <span class="material-symbols-outlined text-accent-amber text-[28px]">warning</span>
+                    <span class="font-label-caps text-text-muted mt-1">AVG RISK</span>
+                    <span class="font-headline-sm text-[24px] lg:text-[28px] text-accent-amber font-bold" id="stat-avg-risk">Low</span>
+                </div>
+                <!-- Card 4: Active Rules -->
+                <div class="glass-card rounded-xl p-md flex flex-col gap-xs">
+                    <span class="material-symbols-outlined text-secondary text-[28px]">security</span>
+                    <span class="font-label-caps text-text-muted mt-1">ACTIVE RULES</span>
+                    <span class="font-headline-sm text-[24px] lg:text-[28px] text-secondary font-bold" id="stat-rules">0</span>
+                </div>
+            </div>
+
+            <!-- Chart & Threat Alerts Split -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-md mt-sm">
+                <!-- Donut Chart Card -->
+                <div class="glass-card rounded-xl p-lg space-y-md lg:col-span-7">
+                    <h3 class="font-headline-sm text-headline-sm text-text-primary">Scan Results Distribution</h3>
+                    <div class="relative h-[240px] flex justify-center">
+                        <canvas id="scanDistributionChart"></canvas>
+                    </div>
+                    <div class="grid grid-cols-3 gap-xs pt-md border-t border-outline-variant/15">
+                        <div class="text-center">
+                            <p class="font-label-caps text-label-caps text-secondary text-[10px]">SAFE</p>
+                            <p class="font-headline-sm text-headline-sm mt-1" id="dist-safe-pct">92%</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="font-label-caps text-label-caps text-accent-amber text-[10px]">SUSPICIOUS</p>
+                            <p class="font-headline-sm text-headline-sm mt-1" id="dist-suspicious-pct">7%</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="font-label-caps text-label-caps text-error text-[10px]">MALICIOUS</p>
+                            <p class="font-headline-sm text-headline-sm mt-1" id="dist-malicious-pct">1%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Threat Alerts List Card -->
+                <div class="glass-card rounded-xl overflow-hidden flex flex-col lg:col-span-5 max-h-[400px] lg:max-h-none">
+                    <div class="px-md py-sm border-b border-outline-variant/15 flex justify-between items-center">
+                        <h3 class="font-headline-sm text-headline-sm text-text-primary">Recent Threat Alerts</h3>
+                        <span class="material-symbols-outlined text-primary cursor-pointer hover:text-white transition-colors" onclick="document.querySelector('[data-tab=scanner-tab]').click()">open_in_new</span>
+                    </div>
+                    <div class="divide-y divide-outline-variant/15 overflow-y-auto flex-1 p-2" id="dashboard-threats-list">
+                        <!-- Alert Items are populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SCANNER PANEL -->
+        <section class="tab-panel flex flex-col gap-lg hidden" id="scanner-tab">
+            <!-- App Selection Search -->
+            <section class="flex flex-col gap-md">
+                <div class="flex justify-between items-end">
+                    <h2 class="font-headline-sm text-headline-sm text-primary">Target Selection</h2>
+                    <span class="font-label-caps text-label-caps text-text-muted">7 APK PRESETS LOADED</span>
+                </div>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-text-muted">search</span>
+                    <input class="w-full bg-bg-console border border-outline-variant/30 rounded-xl py-3 pl-12 pr-md font-body-md text-text-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Search application profiles..." type="text" id="scanner-search-input"/>
+                </div>
+                
+                <!-- Preset Grid -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-sm" id="preset-apps-grid">
+                    <!-- Cards populated dynamically -->
+                </div>
+            </section>
+
+            <!-- Raw Manifest Paste Area -->
+            <section class="glass-card rounded-xl p-md flex flex-col gap-md">
+                <h3 class="font-headline-sm text-text-primary flex items-center gap-xs">
+                    <span class="material-symbols-outlined text-primary">code</span>
+                    Or Paste raw AndroidManifest.xml
+                </h3>
+                <textarea class="w-full h-40 bg-bg-console border border-outline-variant/30 rounded-xl p-md font-label-mono text-label-mono text-text-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none" id="manifest-xml-input" placeholder="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#10;&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; package=&quot;com.example.app&quot;&gt;&#10;    &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot;/&gt;&#10;&lt;/manifest&gt;"></textarea>
+                
+                <div class="flex gap-md">
+                    <button class="flex-1 bg-primary hover:bg-blue-300 text-bg-obsidian font-headline-sm text-[14px] font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95" id="run-scan-btn">
+                        <span class="material-symbols-outlined">radar</span>
+                        Run Malware Analysis
+                    </button>
+                    <button class="px-6 bg-bg-surface hover:bg-slate-800 text-text-primary font-headline-sm text-[14px] font-bold py-3 rounded-xl border border-outline-variant/30 transition-all cursor-pointer" id="clear-scan-btn">
+                        Reset
+                    </button>
+                </div>
+            </section>
+
+            <!-- Scan Loader Panel (Dynamic) -->
+            <section class="glass-card rounded-xl p-lg flex flex-col gap-md hidden animate-pulse" id="scan-loader">
+                <div class="flex items-center gap-lg">
+                    <div class="relative w-16 h-16 flex-shrink-0">
+                        <div class="absolute inset-0 rounded-full border-4 border-primary/20"></div>
+                        <div class="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">radar</span>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-headline-sm text-primary mb-xs" id="loader-title">Analyzing App...</h3>
+                        <div class="w-full bg-bg-console h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-secondary h-full w-[65%]" id="scan-progress-bar-fill"></div>
+                        </div>
+                        <p class="font-label-caps text-text-muted mt-2 tracking-wider">HYBRID HEURISTICS ANALYSIS ACTIVE</p>
+                    </div>
+                </div>
+                
+                <!-- Terminal Log Feed -->
+                <div class="bg-bg-console rounded-xl border border-outline-variant/20 overflow-hidden">
+                    <div class="bg-bg-surface/30 px-md py-xs border-b border-outline-variant/10 flex items-center gap-xs">
+                        <div class="w-2 h-2 rounded-full bg-error/50"></div>
+                        <div class="w-2 h-2 rounded-full bg-accent-amber/50"></div>
+                        <div class="w-2 h-2 rounded-full bg-secondary/50"></div>
+                        <span class="font-label-mono text-[10px] text-text-muted ml-xs">LIVE_ANALYSIS.LOG</span>
+                    </div>
+                    <div class="p-md font-label-mono text-label-mono h-36 overflow-y-auto flex flex-col gap-base text-text-muted" id="loader-terminal-log">
+                        <!-- Output dynamic log ticks -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Threat Analysis Results panel -->
+            <section class="flex flex-col gap-lg hidden" id="scan-results-dashboard">
+                <div class="glass-card p-lg rounded-2xl flex flex-col items-center gap-lg relative overflow-hidden">
+                    <!-- Background Decorative Glow -->
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 blur-[40px] rounded-full"></div>
+                    <h2 class="font-headline-sm text-primary self-start flex items-center gap-2">
+                        <span class="material-symbols-outlined">analytics</span>
+                        Hybrid Security Report
+                    </h2>
+                    
+                    <!-- Speedometer Risk Gauge -->
+                    <div class="relative w-64 h-32 overflow-hidden flex items-end justify-center">
+                        <!-- Background gauge track -->
+                        <div class="w-64 h-64 border-[16px] border-bg-console rounded-full absolute top-0"></div>
+                        <!-- Active gauge fill -->
+                        <div class="w-64 h-64 border-[16px] border-error rounded-full absolute top-0 speedometer-clip transform rotate-[-180deg] transition-all duration-1000" id="active-gauge-dial"></div>
+                        
+                        <!-- Value metrics inside center -->
+                        <div class="absolute bottom-0 text-center z-10">
+                            <span class="font-display-lg text-[42px] lg:text-[48px] text-error font-extrabold leading-none" id="risk-score-value">84%</span>
+                            <span class="block font-label-caps tracking-widest mt-1 text-xs" id="risk-classification-badge">CRITICAL RISK</span>
+                        </div>
+                    </div>
+
+                    <!-- Metadata Grid -->
+                    <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-md pt-md border-t border-outline-variant/15 text-left">
+                        <div class="flex flex-col">
+                            <span class="font-label-caps text-text-muted text-[10px]">APPLICATION NAME</span>
+                            <span class="font-body-md text-text-primary font-semibold mt-1" id="app-display-name">Target Application</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-label-caps text-text-muted text-[10px]">PACKAGE NAME</span>
+                            <span class="font-body-md text-text-primary font-mono text-[13px] mt-1 break-all" id="app-display-package">com.cryptoview.app</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-label-caps text-text-muted text-[10px]">DEVELOPER PROFILE</span>
+                            <span class="font-body-md text-text-primary font-semibold mt-1" id="app-display-dev">v2.4.1-beta</span>
+                        </div>
+                    </div>
+
+                    <!-- Description box -->
+                    <div class="w-full p-md bg-bg-console border border-outline-variant/15 rounded-xl text-sm text-text-secondary leading-relaxed" id="threat-classification-description">
+                        Analysis complete. Details compiled below.
+                    </div>
+                </div>
+
+                <!-- Sub panels: Rule matches & Scanned permissions -->
+                <div class="flex flex-col gap-sm">
+                    <!-- Navigation Tabs -->
+                    <div class="flex bg-bg-console p-1 rounded-xl border border-outline-variant/20">
+                        <button class="flex-1 py-2 rounded-lg bg-surface-container text-text-primary font-label-caps text-label-caps transition-all cursor-pointer focus:outline-none" id="btn-show-rules">
+                            Rule Engine Matches (<span id="rule-matches-count">0</span>)
+                        </button>
+                        <button class="flex-1 py-2 rounded-lg text-text-muted font-label-caps text-label-caps hover:text-text-primary transition-all cursor-pointer focus:outline-none" id="btn-show-perms">
+                            Scanned Permissions (<span id="scanned-perms-count">0</span>)
+                        </button>
+                    </div>
+
+                    <!-- Rule Matches Panel -->
+                    <div class="flex flex-col gap-sm" id="panel-rules-matches">
+                        <div class="flex flex-col gap-sm" id="scan-findings-container">
+                            <!-- Populated with rule match cards -->
+                        </div>
+                    </div>
+
+                    <!-- Permissions Breakdown Panel -->
+                    <div class="flex flex-col gap-sm hidden" id="panel-perms-breakdown">
+                        <div class="flex flex-col gap-sm" id="scan-permissions-container">
+                            <!-- Populated with scanned permissions -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quarantine/Security action button -->
+                <button class="w-full bg-error hover:bg-red-400 py-4 rounded-xl font-headline-sm text-[16px] text-on-error uppercase font-bold tracking-widest transition-all cursor-pointer active:scale-95 shadow-lg shadow-error/10" id="quarantine-btn">
+                    Quarantine Application
+                </button>
+            </section>
+        </section>
+
+        <!-- 3. PERMISSION ANALYZER PANEL -->
+        <section class="tab-panel flex flex-col gap-lg hidden" id="analyzer-tab">
+            <div class="glass-card rounded-xl p-lg flex flex-col gap-md">
+                <h2 class="font-headline-sm text-lg text-primary flex items-center gap-xs">
+                    <span class="material-symbols-outlined">query_stats</span>
+                    Android Permission Directory & Risk Index
+                </h2>
+                <p class="text-sm text-text-secondary leading-relaxed">
+                    This directory indexes the core Android API permissions requested by mobile packages. System categorizations highlight why developers require them versus how malware exploits them for privilege escalation, covert eavesdropping, or file hijacking.
+                </p>
+
+                <!-- Search box -->
+                <div class="relative max-w-md">
+                    <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-text-muted">search</span>
+                    <input class="w-full bg-bg-console border border-outline-variant/30 rounded-xl py-3 pl-12 pr-md font-body-md text-text-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Search permission (e.g. SMS, location)..." type="text" id="permission-search-input"/>
+                </div>
+
+                <div class="flex flex-col gap-sm max-h-[500px] overflow-y-auto pr-xs mt-sm" id="analyzer-directory-list">
+                    <!-- Populated dynamically with permission index cards -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. ML MODEL VISUALIZER PANEL -->
+        <section class="tab-panel flex flex-col gap-lg hidden" id="ml-tab">
+            <!-- Random Forest Explainer -->
+            <div class="glass-card rounded-xl p-lg flex flex-col gap-md">
+                <h2 class="font-headline-sm text-lg text-primary flex items-center gap-xs">
+                    <span class="material-symbols-outlined text-primary">psychology</span>
+                    Random Forest Classifier Explainer
+                </h2>
+                <p class="text-sm text-text-secondary leading-relaxed">
+                    The Random Forest module processes the application's permission vector through an ensemble of 3 distinct decision trees. The model calculates the malware classification probability by averaging leaf outcomes. The active path highlights below in real-time based on your current scan vector.
+                </p>
+                
+                <h4 class="font-label-caps text-xs text-primary mt-sm tracking-wider">CURRENT SCAN FEATURE VECTOR:</h4>
+                <div class="flex flex-wrap gap-2 p-md bg-bg-console border border-outline-variant/20 rounded-xl" id="ml-vector-display">
+                    <span class="text-text-muted text-xs font-label-mono">Run an application scan to visualize the active permission feature vector inputs.</span>
+                </div>
+            </div>
+
+            <!-- Decision Trees visualizer cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-md">
+                <!-- Tree 1 -->
+                <div class="glass-card rounded-xl p-md flex flex-col gap-sm overflow-x-auto">
+                    <div class="flex justify-between items-center border-b border-outline-variant/15 pb-2">
+                        <h4 class="font-headline-sm text-[15px] font-semibold text-text-primary">Tree 1: Sms & Overlay</h4>
+                        <span class="font-label-mono text-xs text-primary font-bold" id="t1-tree-result">Idle</span>
+                    </div>
+                    <div class="tree-node-visual" id="tree-1-structure">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Tree 2 -->
+                <div class="glass-card rounded-xl p-md flex flex-col gap-sm overflow-x-auto">
+                    <div class="flex justify-between items-center border-b border-outline-variant/15 pb-2">
+                        <h4 class="font-headline-sm text-[15px] font-semibold text-text-primary">Tree 2: Spyware & Data Leak</h4>
+                        <span class="font-label-mono text-xs text-primary font-bold" id="t2-tree-result">Idle</span>
+                    </div>
+                    <div class="tree-node-visual" id="tree-2-structure">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Tree 3 -->
+                <div class="glass-card rounded-xl p-md flex flex-col gap-sm overflow-x-auto">
+                    <div class="flex justify-between items-center border-b border-outline-variant/15 pb-2">
+                        <h4 class="font-headline-sm text-[15px] font-semibold text-text-primary">Tree 3: Location & Admin</h4>
+                        <span class="font-label-mono text-xs text-primary font-bold" id="t3-tree-result">Idle</span>
+                    </div>
+                    <div class="tree-node-visual" id="tree-3-structure">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Importance -->
+            <div class="glass-card rounded-xl p-lg">
+                <h3 class="font-headline-sm text-headline-sm text-text-primary flex items-center gap-xs mb-md">
+                    <span class="material-symbols-outlined text-accent-amber">bar_chart</span>
+                    Random Forest Model - Feature Importances
+                </h3>
+                <div class="relative h-[220px]">
+                    <canvas id="featureImportanceChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. SQLITE DATABASE PANEL -->
+        <section class="tab-panel flex flex-col gap-lg hidden" id="database-tab">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+                <!-- Tables layout description -->
+                <div class="glass-card rounded-xl p-lg lg:col-span-4 flex flex-col gap-md">
+                    <h3 class="font-headline-sm text-lg text-primary flex items-center gap-2">
+                        <span class="material-symbols-outlined">database</span>
+                        malware_detector.db
+                    </h3>
+                    <p class="text-xs text-text-secondary leading-relaxed">
+                        Active tables inside the simulated device SQLite local database. Select or update rules configuration directly or purge old database records.
+                    </p>
+
+                    <div class="space-y-4 mt-sm border-t border-outline-variant/15 pt-md">
+                        <div>
+                            <h4 class="font-headline-sm text-[14px] text-primary font-semibold">📂 Table: scan_history</h4>
+                            <p class="text-[11px] text-text-muted mt-0.5">Logs of completed app scans, metadata, and threat metrics.</p>
+                            <div class="font-label-mono text-[9px] text-text-muted mt-2 p-2 bg-bg-console border border-outline-variant/20 rounded">
+                                cols: id(int), app_name(text), package_name(text), risk_score(int), classification(text), scan_date(datetime)
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-headline-sm text-[14px] text-secondary font-semibold">📂 Table: malware_rules</h4>
+                            <p class="text-[11px] text-text-muted mt-0.5">Rule conditions evaluated by the Static Analysis Engine.</p>
+                            <div class="font-label-mono text-[9px] text-text-muted mt-2 p-2 bg-bg-console border border-outline-variant/20 rounded">
+                                cols: id(int), rule_name(text), description(text), risk_weight(int), permissions(text/JSON)
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="w-full bg-bg-surface hover:bg-slate-800 text-error hover:text-red-400 font-headline-sm text-[12px] font-bold py-3 mt-lg rounded-xl border border-outline-variant/30 transition-all flex items-center justify-center gap-2 cursor-pointer" id="db-clear-history-btn">
+                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                        Clear Scan History Table
+                    </button>
+                </div>
+
+                <!-- SQLite CLI Console -->
+                <div class="lg:col-span-8 flex flex-col bg-bg-console rounded-2xl border border-outline-variant/20 overflow-hidden shadow-2xl min-h-[380px]">
+                    <div class="bg-bg-surface px-md py-sm border-b border-outline-variant/15 flex justify-between items-center">
+                        <div class="flex items-center gap-xs">
+                            <span class="material-symbols-outlined text-primary text-[18px]">terminal</span>
+                            <span class="font-label-mono text-xs text-text-primary">SQLite Interactive Query Terminal</span>
+                        </div>
+                        <div class="flex gap-1">
+                            <div class="w-2.5 h-2.5 rounded-full bg-[#ef4444]"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-[#f59e0b]"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-[#10b981]"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 p-md flex flex-col h-96 overflow-hidden">
+                        <div class="flex-1 overflow-y-auto font-label-mono text-xs text-slate-300 space-y-2 pr-xs" id="db-console-log">
+                            Simulated SQLite3 console initialized.<br>
+                            Type SQL commands below. Supported: SELECT, INSERT, UPDATE, DELETE.<br>
+                            Try running: <code>SELECT * FROM scan_history</code> or <code>SELECT * FROM malware_rules WHERE risk_weight = 90</code><br><br>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 border-t border-outline-variant/20 pt-sm mt-md">
+                            <span class="font-label-mono text-primary font-bold">sqlite&gt;</span>
+                            <input type="text" class="flex-1 bg-transparent border-none outline-none focus:ring-0 text-white font-label-mono text-xs" id="db-console-query-input" placeholder="SELECT * FROM scan_history;" autocomplete="off"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Viewer table -->
+            <div class="glass-card rounded-xl p-lg mt-md">
+                <h3 class="font-headline-sm text-headline-sm text-text-primary flex items-center gap-xs mb-md">
+                    <span class="material-symbols-outlined text-primary">table_view</span>
+                    Interactive Table Viewer: scan_history
+                </h3>
+                <div class="overflow-x-auto border border-outline-variant/15 rounded-xl bg-bg-console">
+                    <table class="w-full border-collapse text-left text-sm" id="db-table-history">
+                        <thead>
+                            <tr class="bg-bg-surface/50 text-text-muted font-semibold border-b border-outline-variant/15">
+                                <th class="p-md">ID</th>
+                                <th class="p-md">Application Name</th>
+                                <th class="p-md">Package Name</th>
+                                <th class="p-md">Risk Score</th>
+                                <th class="p-md">Classification</th>
+                                <th class="p-md">Scan Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-outline-variant/10" id="db-table-history-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. RULE EDITOR PANEL -->
+        <section class="tab-panel flex flex-col gap-lg hidden" id="rules-tab">
+            <div class="glass-card rounded-xl p-lg flex flex-col gap-md">
+                <div class="flex justify-between items-center flex-wrap gap-md">
+                    <h2 class="font-headline-sm text-lg text-primary flex items-center gap-xs">
+                        <span class="material-symbols-outlined">scale</span>
+                        Malware Rule Registry - Rule Engine Configuration
+                    </h2>
+                    <button class="bg-primary hover:bg-blue-300 text-bg-obsidian font-headline-sm text-[12px] font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer active:scale-95" id="btn-new-rule-modal">
+                        <span class="material-symbols-outlined text-[18px]">add</span>
+                        Add New Rule
+                    </button>
+                </div>
+                <p class="text-sm text-text-secondary leading-relaxed">
+                    The Static Hybrid Analysis Engine checks permission intersections. Create or edit specific permission bundles that match known malicious profiles. Changes instantly adjust threat outputs in the database!
+                </p>
+
+                <!-- Cards grid of rules -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-md mt-md" id="rule-registry-cards">
+                    <!-- Rule cards populated dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. NETWORK & TUNNEL CONSOLE -->
+        <section class="tab-panel flex flex-col gap-lg hidden" id="console-tab">
+            <div class="glass-card rounded-xl p-lg flex flex-col gap-md">
+                <h2 class="font-headline-sm text-lg text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined">server</span>
+                    Hybrid Architecture Endpoint Monitor
+                </h2>
+                <p class="text-sm text-text-secondary leading-relaxed">
+                    This monitor intercepts simulated communications between the **Client Android Scanner (Application Layer)** and the **Flask API Server (Backend Layer)** hosting the Random Forest weights. Scrutinize JSON HTTP payloads, network status codes, latency, and db queries as requests process.
+                </p>
+
+                <div class="bg-bg-console rounded-xl border border-outline-variant/20 overflow-hidden shadow-2xl">
+                    <div class="bg-bg-surface px-md py-sm border-b border-outline-variant/15 flex justify-between items-center">
+                        <div class="flex items-center gap-2 text-secondary">
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+                            </span>
+                            <span class="font-label-mono text-xs">Tunnel Status: POST http://127.0.0.1:5000/predict</span>
+                        </div>
+                        <button class="bg-bg-surface hover:bg-slate-800 text-text-primary border border-outline-variant/30 text-[10px] font-bold px-3 py-1 rounded transition-all cursor-pointer" id="console-clear-btn">
+                            Clear Log
+                        </button>
+                    </div>
+                    <div class="p-md font-label-mono text-xs text-slate-300 h-96 overflow-y-auto leading-relaxed space-y-2" id="endpoint-console-log">
+                        [System] Tunnel connected. Awaiting HTTP POST triggers from application scanning...<br>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FORM MODAL FOR CREATING/EDITING CUSTOM RULE (Styled with Tailwind) -->
+    <div class="fixed inset-0 z-50 items-center justify-center bg-black/70 backdrop-blur-sm hidden" id="rule-creation-modal">
+        <div class="bg-bg-surface border border-outline-variant/30 rounded-2xl w-full max-w-lg mx-margin-mobile p-lg flex flex-col gap-md shadow-2xl relative animate-[fadeIn_0.2s_ease]">
+            <div class="flex justify-between items-center border-b border-outline-variant/15 pb-sm">
+                <h3 class="font-headline-sm text-lg text-text-primary" id="modal-form-title">Create Android Malware Rule</h3>
+                <button class="text-text-muted hover:text-white text-2xl focus:outline-none" id="btn-close-modal">&times;</button>
+            </div>
+            
+            <form id="rule-creation-form" class="space-y-4">
+                <input type="hidden" id="rule-form-id">
+                
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-text-muted">Rule Unique ID Name:</label>
+                    <input type="text" class="bg-bg-console border border-outline-variant/30 rounded-lg p-2.5 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm" id="rule-form-name" placeholder="e.g. Spyware_SMS_Steal" required>
+                </div>
+                
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-text-muted">Risk Contribution Weight (0 - 100):</label>
+                    <input type="number" class="bg-bg-console border border-outline-variant/30 rounded-lg p-2.5 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm" id="rule-form-weight" min="0" max="100" placeholder="e.g. 85" required>
+                </div>
+                
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-text-muted">Detailed Description (Malware Signatures):</label>
+                    <input type="text" class="bg-bg-console border border-outline-variant/30 rounded-lg p-2.5 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm" id="rule-form-desc" placeholder="App intercepting phone calls to steal..." required>
+                </div>
+                
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-text-muted">Select Required Permissions (Must match all):</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-40 overflow-y-auto bg-bg-console border border-outline-variant/30 rounded-lg p-3" id="rule-form-checkboxes">
+                        <!-- Loaded dynamically with checkboxes -->
+                    </div>
+                </div>
+
+                <div class="flex gap-md justify-end pt-md border-t border-outline-variant/15">
+                    <button type="button" class="bg-bg-surface hover:bg-slate-800 text-text-primary px-4 py-2 rounded-xl border border-outline-variant/30 text-xs transition-all cursor-pointer" id="btn-cancel-modal">Cancel</button>
+                    <button type="submit" class="bg-primary hover:bg-blue-300 text-bg-obsidian font-semibold px-5 py-2 rounded-xl text-xs transition-all cursor-pointer active:scale-95">Save Malware Rule</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application Controllers Scripts -->
+    <script src="js/database.js"></script>
+    <script src="js/engine.js"></script>
+    <script src="js/ml.js"></script>
+    <script src="js/scanner.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
